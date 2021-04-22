@@ -1,5 +1,47 @@
+const config = require('../config.json');
+const prefix = (config.PREFIX) ? config.PREFIX : '!';
+
+// requiring API
 const api = require('./api');
 
+// commands
+const ping = (c, a, m) => {
+  if (c === 'ping') {
+    m.reply('pong');
+  }
+};
+
+const getArgs = (c, a, m) => {
+  if (c === 'getargs') {
+    m.reply(a.join(' '));
+  }
+};
+
+const getData = (c, a, m) => {
+  if (c === 'getdata') {
+    if (a[0] !== undefined) {
+      const response = api.getData(a[0]);
+      m.reply(response);
+    }
+  }
+};
+
+const saveData = (c, a, m) => {
+  if (c === 'savedata') {
+    if ((a[0] !== undefined) && (a[1] !== undefined)) {
+      api.saveData(a[0], a[1]);
+    }
+    m.reply('Data saved.');
+  }
+};
+
+const getDump = (c, a, m) => {
+  if (c === 'dumpdata') {
+    m.reply(api.getDump().join(' '));
+  }
+};
+
+// exposed command implementation
 module.exports = (message) => {
   // making sure message author is not a bot
   if (message.author.bot) return;
@@ -8,15 +50,15 @@ module.exports = (message) => {
 
   // disecting and normalizing command
   const commandBody = message.content.slice(prefix.length);
-  const args = commandBody.split(' ');
-  const command = args.shift().toLowerCase();
+  const args        = commandBody.split(' ');
+  const command     = args.shift().toLowerCase();
 
-  // parsing commands
-  if (command === 'ping') {
-    message.reply('pong');
-  }
+  console.log(command, args, message);
 
-  if (command === 'getargs') {
-    message.reply(args.join(' '));
-  }
+  // hooking commands
+  ping(command, args, message);
+  getArgs(command, args, message);
+  getData(command, args, message);
+  saveData(command, args, message);
+  getDump(command, args, message);
 };
