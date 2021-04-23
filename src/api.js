@@ -20,9 +20,6 @@ const buildKey = (user_id, message_url) => {
   return `${user_id}_${message_url}`;
 }
 
-// TODO: things tend to be fucky when
-// using multiple keywords separated by spaces
-
 module.exports = {
 
   getDump: () => {

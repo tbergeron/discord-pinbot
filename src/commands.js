@@ -11,20 +11,65 @@ const reply = (m, c) => {
 };
 
 // convert pins result to string
+// TODO: make that whole shitty method better
 const stringifyPins = (pins) => {
   let stringifiedPins = '';
   pins.forEach((pin) => {
     // strip user id
     const splitString  = pin[0].split('_');
-    stringifiedPins   += `${splitString[1]} --- `;
+    // making sure we have an URL
+    let url = 'no_url_found';
+    if (splitString[0] !== undefined) {
+      if (splitString[0].includes('http')) {
+        url = splitString[0];
+      }
+    }
+    if (splitString[1] !== undefined) {
+      if (splitString[1].includes('http')) {
+        url = splitString[1];
+      }
+    }
+    stringifiedPins   += `${url} -- `;
   });
   return stringifiedPins;
 }
 
 // commands
-const ping = (c, a, m) => {
-  if (c === 'ping') {
-    reply(m, 'pong');
+const help = (c, a, m) => {
+  if (c === 'help') {
+    let helpMessage = "here are my current commands:\n```";
+    helpMessage += "!uptime\n\n";
+    helpMessage += "Common Pins (shared between all users)\n\n";
+    helpMessage += "!pin            <message_url> <keywords>\n";
+    helpMessage += "!unpin          <message_url>\n";
+    helpMessage += "!searchpins     <keywords>\n\n";
+    helpMessage += "Per-User Pins (only accessible by you)\n\n";
+    helpMessage += "!userpin        <message_url> <keyword>\n";
+    helpMessage += "!userunpin      <message_url>\n";
+    helpMessage += "!usersearchpins <keywords>\n```";
+
+    helpMessage += "**common pins are working but per-user pins are borked atm**\n";
+
+    reply(m, helpMessage);
+  }
+};
+
+const uptime = (c, a, m) => {
+  if (c === 'uptime') {
+    // TODO rewrite this very sucky code
+    let totalSeconds = (m.client.uptime / 1000);
+    let days = Math.floor(totalSeconds / 86400);
+    totalSeconds %= 86400;
+
+    let hours = Math.floor(totalSeconds / 3600);
+    totalSeconds %= 3600;
+
+    let minutes = Math.floor(totalSeconds / 60);
+    let seconds = Math.floor(totalSeconds % 60);
+
+    let uptime = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds.`;
+
+    reply(m, `bot has been online for ${uptime}`);
   }
 };
 
@@ -46,11 +91,11 @@ const pin = (c, a , m) => {
     if ((a[0] !== undefined) && (a[1] !== undefined)) {
       const user_id     = m.author.id;
       const message_url = a[0];
-      const keywords    = a.slice(0, a.length).join(' ');
+      const keywords    = a.slice(1, a.length).join(' ');
 
       api.pin(user_id, message_url, keywords);
 
-      reply(m, `Pinned message: **${message_url}** Keywords: **${keywords}**`);
+      reply(m, `pinned message: **${message_url}** Keywords: **${keywords}**`);
     } else {
       reply(m, `${prefix}pin syntax: <message_url> <keywords>`);
     }
@@ -62,11 +107,11 @@ const userPin = (c, a , m) => {
     if ((a[0] !== undefined) && (a[1] !== undefined)) {
       const user_id     = m.author.id;
       const message_url = a[0];
-      const keywords    = a.slice(0, a.length).join(' ');
+      const keywords    = a.slice(1, a.length).join(' ');
 
       api.pin(user_id, message_url, keywords, false);
 
-      reply(m, `Pinned message: **${message_url}** for UserId: **${user_id}** Keywords: **${keywords}**`);
+      reply(m, `pinned message: **${message_url}** for UserId: **${user_id}** Keywords: **${keywords}**`);
     } else {
       reply(m, `${prefix}userPin syntax: <message_url> <keywords>`);
     }
@@ -81,7 +126,7 @@ const unpin = (c, a, m) => {
 
       api.unpin(user_id, message_url);
 
-      reply(m, `Unpinned message: **${message_url}**`);
+      reply(m, `unpinned message: **${message_url}**`);
     } else {
       reply(m, `${prefix}unpin syntax: <message_url>`);
     }
@@ -96,7 +141,7 @@ const userUnpin = (c, a, m) => {
 
       api.unpin(user_id, message_url, false);
 
-      reply(m, `Unpinned message: **${message_url}** for UserId: **${user_id}**`);
+      reply(m, `unpinned message: **${message_url}** for UserId: **${user_id}**`);
     } else {
       reply(m, `${prefix}userUnpin syntax: <message_url>`);
     }
@@ -112,7 +157,9 @@ const searchPins = (c, a, m) => {
       // fetching common pins based on keywords
       const pins = api.search(user_id, keywords);
 
-      reply(m, `Searching in pins for **${keywords}** for UserId: **${user_id}**. Result: ${stringifyPins(pins)}`);
+      console.log('searchPins', pins);
+
+      reply(m, `searching in pins for **${keywords}** Result: ${stringifyPins(pins)}`);
     } else {
       reply(m, `${prefix}searchPins syntax: <keywords>`);
     }
@@ -128,7 +175,9 @@ const userSearchPins = (c, a, m) => {
       // fetching per-user pins based on keywords
       const pins = api.search(user_id, keywords, false);
 
-      reply(m, `Searching in pins for **${keywords}** for UserId: **${user_id}**. Result: ${stringifyPins(pins)}`);
+      console.log('userSearchPins', pins);
+
+      reply(m, `searching in pins for **${keywords}** for UserId: **${user_id}**. Result: ${stringifyPins(pins)}`);
     } else {
       reply(m, `${prefix}userSearchPins syntax: <keywords>`);
     }
@@ -150,7 +199,8 @@ module.exports = (message) => {
   console.log('[command incoming]:', command, args);
 
   // hooking commands
-  ping           (command, args, message);
+  help           (command, args, message);
+  uptime         (command, args, message);
   getArgs        (command, args, message);
   getDump        (command, args, message);
   pin            (command, args, message);
