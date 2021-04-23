@@ -69,7 +69,7 @@ const uptime = (c, a, m) => {
 
     let uptime = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds.`;
 
-    reply(m, `bot has been online for ${uptime}`);
+    reply(m, `i have been up for ${uptime}`);
   }
 };
 
@@ -157,7 +157,7 @@ const searchPins = (c, a, m) => {
       // fetching common pins based on keywords
       const pins = api.search(user_id, keywords);
 
-      console.log('searchPins', pins);
+      // TODO: how to embed messages in chat?
 
       reply(m, `searching in pins for **${keywords}** Result: ${stringifyPins(pins)}`);
     } else {
@@ -174,8 +174,6 @@ const userSearchPins = (c, a, m) => {
 
       // fetching per-user pins based on keywords
       const pins = api.search(user_id, keywords, false);
-
-      console.log('userSearchPins', pins);
 
       reply(m, `searching in pins for **${keywords}** for UserId: **${user_id}**. Result: ${stringifyPins(pins)}`);
     } else {
