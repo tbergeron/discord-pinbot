@@ -23,24 +23,32 @@ Auth URL: https://discord.com/api/oauth2/authorize?client_id=834906079837290538&
 
 ### UNLIMITED PIN MANAGEMENT
 
+```
 !pin          <message link> <keywords>
 !unpin        <message link>
 !searchpins   <keywords>
+```
 
 ### PIN CATEGORIZATION
 
+```
 !categorize   <message link> <keywords>
 !uncategorize <message link>
+```
 
 ### PIN REMINDERS
 
+```
 !remindme     <message link> <delay> <message>
 !forget       <message link>
+```
 
 ### PARAMETERS
 
+```
 - <message link> are the one used when clicking "Copy Message Link"
 - <keywords>     are just comma separated or a string of text
 - <delay>        being either relative or fixed time:
                      - 5m, 1h, 2d or 2021-04-22 10:00AM
 - <message>      is just a string of text
+```
