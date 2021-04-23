@@ -16,29 +16,22 @@ Auth URL: https://discord.com/api/oauth2/authorize?client_id=834906079837290538&
   - (having as less redundancy as possible)
   - i.e. KEY: userid_messageurl = keywords
     - would make it easy to find line based on `userid` or `messageurl` or `keywords`
+      - [ ] Find a similar structure for reminders
 
 - [ ] Plan & implement message pin feature
 - [ ] Plan & implement search message pin feature
-- [ ] Plan & implement message categorization feature
 - [ ] Plan & implement message reminder feature
 
 ***
 
 # Commands & Syntax
 
-### UNLIMITED PIN MANAGEMENT
+### UNLIMITED PIN MANAGEMENT & CATEGORIZATION VIA KEYWORDS
 
 ```
 !pin          <message link> <keywords> (redundant with `!categorize`?)
 !unpin        <message link>
 !searchpins   <keywords>
-```
-
-### PIN CATEGORIZATION
-
-```
-!categorize   <message link> <keywords>
-!uncategorize <message link>
 ```
 
 ### PIN REMINDERS
