@@ -60,9 +60,9 @@ module.exports = (message) => {
   console.log(command, args);
 
   // hooking commands
-  ping(command, args, message);
-  getArgs(command, args, message);
-  getData(command, args, message);
+  ping    (command, args, message);
+  getArgs (command, args, message);
+  getData (command, args, message);
   saveData(command, args, message);
-  getDump(command, args, message);
+  getDump (command, args, message);
 };
