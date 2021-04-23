@@ -20,8 +20,9 @@ const getArgs = (c, a, m) => {
 const getData = (c, a, m) => {
   if (c === 'getdata') {
     if (a[0] !== undefined) {
-      const response = api.getData(a[0]);
-      m.reply(response);
+      const key = a[0];
+      const response = api.getData(key);
+      m.reply(`data for Key: **${key}** Value: **${response}**`);
     }
   }
 };
@@ -29,16 +30,18 @@ const getData = (c, a, m) => {
 const saveData = (c, a, m) => {
   if (c === 'savedata') {
     if ((a[0] !== undefined) && (a[1] !== undefined)) {
-      api.saveData(a[0], a[1]);
+      const key   = a[0];
+      const value = a[1]; // TODO: handle multiple arguments
+      api.saveData(key, value);
+      m.reply(`saved Key: **${key}** Data: **${value}**`);
     }
-    m.reply('Data saved.');
   }
 };
 
-// TODO: not working
 const getDump = (c, a, m) => {
   if (c === 'getdump') {
-    m.reply(JSON.stringify(api.getDump()));
+    const dump = JSON.stringify(api.getDump());
+    m.reply(`dumping entire database: **${dump}**`);
   }
 };
 
