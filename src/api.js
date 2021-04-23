@@ -1,5 +1,5 @@
 // file-based data API implementation
-const fs = require('fs');
+const fs           = require('fs');
 const databasePath = './database.json';
 
 // create database if file doesn't exist yet
@@ -9,7 +9,7 @@ if (!fs.existsSync(databasePath)) {
 
 // read database content
 const databaseContent = fs.readFileSync(databasePath, 'utf8');
-const data = JSON.parse(databaseContent);
+const data            = JSON.parse(databaseContent);
 
 // write memory data to disk
 const persist = () => {

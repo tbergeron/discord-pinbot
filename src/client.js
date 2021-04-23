@@ -13,7 +13,7 @@ module.exports = () => {
   const client = new Discord.Client();
 
   // hooking events
-  client.on('ready', onReady);
+  client.on('ready',   onReady);
   client.on('message', onMessage);
 
   // login to discord

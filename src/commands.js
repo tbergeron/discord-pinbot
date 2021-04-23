@@ -20,7 +20,7 @@ const getArgs = (c, a, m) => {
 const getData = (c, a, m) => {
   if (c === 'getdata') {
     if (a[0] !== undefined) {
-      const key = a[0];
+      const key      = a[0];
       const response = api.getData(key);
       m.reply(`data for Key: **${key}** Value: **${response}**`);
     }
@@ -57,7 +57,7 @@ module.exports = (message) => {
   const args        = commandBody.split(' ');
   const command     = args.shift().toLowerCase();
 
-  console.log(command, args);
+  console.log('command incoming:', command, args);
 
   // hooking commands
   ping    (command, args, message);
