@@ -12,21 +12,23 @@ Auth URL: https://discord.com/api/oauth2/authorize?client_id=834906079837290538&
 - [x] Establish list of commands and syntax
   - (see list below)
 
-- [ ] Find an universal way of making data reusable
+- [x] Find an universal way of making data reusable
   - (having as less redundancy as possible)
   - i.e. KEY: userid_messageurl = keywords
     - would make it easy to find line based on `userid` or `messageurl` or `keywords`
       - [ ] Find a similar structure for reminders
 
-- [ ] Plan & implement message pin feature
-- [ ] Plan & implement search message pin feature
+- [x] Plan & implement message pin feature
+  - [x] Per-user Pins
+  - [ ] Common Pins
+- [x] Plan & implement search message pin feature
 - [ ] Plan & implement message reminder feature
 
 ***
 
 # Commands & Syntax
 
-### UNLIMITED PIN MANAGEMENT & CATEGORIZATION VIA KEYWORDS
+### Pin Management
 
 ```
 !pin          <message link> <keywords> (redundant with `!categorize`?)
@@ -34,14 +36,22 @@ Auth URL: https://discord.com/api/oauth2/authorize?client_id=834906079837290538&
 !searchpins   <keywords>
 ```
 
-### PIN REMINDERS
+### Per-User Pin Management
+
+```
+!userpin          <message link> <keywords> (redundant with `!categorize`?)
+!userunpin        <message link>
+!usersearchpins   <keywords>
+```
+
+### Message Reminders
 
 ```
 !remindme     <message link> <delay> <message>
 !forget       <message link>
 ```
 
-### PARAMETERS
+### Parameters
 
 ```
 - <message link> are the one used when clicking "Copy Message Link"
