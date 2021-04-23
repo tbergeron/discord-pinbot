@@ -35,9 +35,10 @@ const saveData = (c, a, m) => {
   }
 };
 
+// TODO: not working
 const getDump = (c, a, m) => {
-  if (c === 'dumpdata') {
-    m.reply(api.getDump().join(' '));
+  if (c === 'getdump') {
+    m.reply(JSON.stringify(api.getDump()));
   }
 };
 
@@ -53,7 +54,7 @@ module.exports = (message) => {
   const args        = commandBody.split(' ');
   const command     = args.shift().toLowerCase();
 
-  console.log(command, args, message);
+  console.log(command, args);
 
   // hooking commands
   ping(command, args, message);
