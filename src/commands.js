@@ -8,6 +8,7 @@ const api = require('./api');
 const reply = (m, c) => {
   console.log('[replying]:', c);
   m.reply(c);
+  m.react('👌');
 };
 
 // convert pins result to string
@@ -29,7 +30,7 @@ const stringifyPins = (pins) => {
         url = splitString[1];
       }
     }
-    stringifiedPins   += `${url} -- `;
+    stringifiedPins   += `\n${url}\n`;
   });
   return stringifiedPins;
 }
@@ -70,19 +71,6 @@ const uptime = (c, a, m) => {
     let uptime = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds.`;
 
     reply(m, `i have been up for ${uptime}`);
-  }
-};
-
-const getArgs = (c, a, m) => {
-  if (c === 'getargs') {
-    reply(m, a.join(' '));
-  }
-};
-
-const getDump = (c, a, m) => {
-  if (c === 'getdump') {
-    const dump = JSON.stringify(api.getDump());
-    reply(m, `dumping entire database: **${dump}**`);
   }
 };
 
@@ -159,7 +147,7 @@ const searchPins = (c, a, m) => {
 
       // TODO: how to embed messages in chat?
 
-      reply(m, `searching in pins for **${keywords}** Result: ${stringifyPins(pins)}`);
+      reply(m, `searching in pins for **${keywords}** Result(s): ${stringifyPins(pins)}`);
     } else {
       reply(m, `${prefix}searchPins syntax: <keywords>`);
     }
@@ -175,7 +163,7 @@ const userSearchPins = (c, a, m) => {
       // fetching per-user pins based on keywords
       const pins = api.search(user_id, keywords, false);
 
-      reply(m, `searching in pins for **${keywords}** for UserId: **${user_id}**. Result: ${stringifyPins(pins)}`);
+      reply(m, `searching in pins for **${keywords}** for UserId: **${user_id}**. Result(s): ${stringifyPins(pins)}`);
     } else {
       reply(m, `${prefix}userSearchPins syntax: <keywords>`);
     }
@@ -199,8 +187,6 @@ module.exports = (message) => {
   // hooking commands
   help           (command, args, message);
   uptime         (command, args, message);
-  getArgs        (command, args, message);
-  getDump        (command, args, message);
   pin            (command, args, message);
   unpin          (command, args, message);
   userPin        (command, args, message);
