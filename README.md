@@ -20,7 +20,7 @@ Auth URL: https://discord.com/api/oauth2/authorize?client_id=834906079837290538&
 
 - [x] Plan & implement message pin feature
   - [x] Per-user Pins
-  - [ ] Common Pins
+  - [x] Common Pins
 - [x] Plan & implement search message pin feature
 - [ ] Plan & implement message reminder feature
 
