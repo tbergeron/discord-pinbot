@@ -1,6 +1,7 @@
 // file-based data API implementation
 const fs           = require('fs');
 const databasePath = './database.json';
+const SEPARATOR    = '_';
 
 // create database if file doesn't exist yet
 if (!fs.existsSync(databasePath)) {
@@ -17,14 +18,10 @@ const persist = () => {
 };
 
 const buildKey = (user_id, message_url) => {
-  return `${user_id}_${message_url}`;
+  return `${user_id}${SEPARATOR}${message_url}`;
 }
 
 module.exports = {
-
-  getDump: () => {
-    return data;
-  },
 
   pin: (user_id, message_url, keywords, common = true) => {
     try {
@@ -59,24 +56,34 @@ module.exports = {
   },
 
   search: (user_id, keywords, common = true) => {
-    const filteredPins = Object.entries(data).filter(e => e[1].includes(keywords));
+    try {
+      const filteredPins = Object.entries(data).filter(e => e[1].includes(keywords));
 
-    if (common) {
+      if (common) {
+        // if common; only get entries WITHOUT user_id attached
+        // TODO: find better way; seems sucky and unsafe imo
+        for (let i = 0; i < filteredPins.length; i++) {
+          const pin = filteredPins[i];
+          if (pin[0].includes(SEPARATOR)) {
+            delete filteredPins[i];
+          }
+        }
 
-      // TODO: if common; only get entries WITHOUT user_id attached
-
-    } else {
-      // otherwise removing pins that aren't meant to that user
-      // TODO: find better way; seems sucky and unsafe imo
-      for (let i = 0; i < filteredPins.length; i++) {
-        const pin = filteredPins[i];
-        if (!pin[0].includes(user_id)) {
-          delete filteredPins[i];
+      } else {
+        // otherwise removing pins that aren't meant to that user
+        // TODO: find better way; seems sucky and unsafe imo
+        for (let i = 0; i < filteredPins.length; i++) {
+          const pin = filteredPins[i];
+          if (!pin[0].includes(user_id)) {
+            delete filteredPins[i];
+          }
         }
       }
+    } catch (e) {
+      throw e;
+    } finally {
+      return filteredPins;
     }
-
-    return filteredPins;
   }
 
 };
