@@ -55,28 +55,31 @@ module.exports = {
     }
   },
 
-  search: (user_id, keywords, common = true) => {
+  search: (server_id, user_id, keywords, common = true) => {
+    const filteredPins = Object.entries(data).filter(e => e[1].includes(keywords));
     try {
-      const filteredPins = Object.entries(data).filter(e => e[1].includes(keywords));
-
       if (common) {
         // if common; only get entries WITHOUT user_id attached
-        // TODO: find better way; seems sucky and unsafe imo
         for (let i = 0; i < filteredPins.length; i++) {
           const pin = filteredPins[i];
           if (pin[0].includes(SEPARATOR)) {
             delete filteredPins[i];
           }
         }
-
       } else {
         // otherwise removing pins that aren't meant to that user
-        // TODO: find better way; seems sucky and unsafe imo
         for (let i = 0; i < filteredPins.length; i++) {
           const pin = filteredPins[i];
           if (!pin[0].includes(user_id)) {
             delete filteredPins[i];
           }
+        }
+      }
+      // keep only entries including server_id
+      for (let i = 0; i < filteredPins.length; i++) {
+        const pin = filteredPins[i];
+        if (!pin[0].includes(server_id)) {
+          delete filteredPins[i];
         }
       }
     } catch (e) {

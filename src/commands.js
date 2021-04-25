@@ -6,9 +6,15 @@ const api = require('./api');
 
 // reply with integrated output to console
 const reply = (m, c) => {
+
+  const server_id   = m.guild.id;
+  const user_id     = m.author.id;
+
+  console.log('server_id:', server_id, 'user_id:', user_id);
+
   console.log('[replying]:', c);
-  m.reply(c);
   m.react('👌');
+  m.reply(c);
 };
 
 // convert pins result to string
@@ -49,8 +55,6 @@ const help = (c, a, m) => {
     helpMessage += "!userunpin      <message_url>\n";
     helpMessage += "!usersearchpins <keywords>\n```";
 
-    helpMessage += "**common pins are working but per-user pins are borked atm**\n";
-
     reply(m, helpMessage);
   }
 };
@@ -77,13 +81,14 @@ const uptime = (c, a, m) => {
 const pin = (c, a , m) => {
   if (c === 'pin') {
     if ((a[0] !== undefined) && (a[1] !== undefined)) {
+      const server_id   = m.guild.id;
       const user_id     = m.author.id;
       const message_url = a[0];
       const keywords    = a.slice(1, a.length).join(' ');
 
-      api.pin(user_id, message_url, keywords);
+      api.pin(server_id, user_id, message_url, keywords);
 
-      reply(m, `pinned message: **${message_url}** Keywords: **${keywords}**`);
+      reply(m, `pinned message: **${message_url}** (keywords: **${keywords}**)`);
     } else {
       reply(m, `${prefix}pin syntax: <message_url> <keywords>`);
     }
@@ -93,13 +98,14 @@ const pin = (c, a , m) => {
 const userPin = (c, a , m) => {
   if (c === 'userpin') {
     if ((a[0] !== undefined) && (a[1] !== undefined)) {
+      const server_id   = m.guild.id;
       const user_id     = m.author.id;
       const message_url = a[0];
       const keywords    = a.slice(1, a.length).join(' ');
 
-      api.pin(user_id, message_url, keywords, false);
+      api.pin(server_id, user_id, message_url, keywords, false);
 
-      reply(m, `pinned message: **${message_url}** for UserId: **${user_id}** Keywords: **${keywords}**`);
+      reply(m, `pinned message: **${message_url}** for **${m.author.username}** (keywords: **${keywords}**)`);
     } else {
       reply(m, `${prefix}userPin syntax: <message_url> <keywords>`);
     }
@@ -109,10 +115,11 @@ const userPin = (c, a , m) => {
 const unpin = (c, a, m) => {
   if (c === 'unpin') {
     if (a[0] !== undefined) {
+      const server_id   = m.guild.id;
       const user_id     = m.author.id;
       const message_url = a[0];
 
-      api.unpin(user_id, message_url);
+      api.unpin(server_id, user_id, message_url);
 
       reply(m, `unpinned message: **${message_url}**`);
     } else {
@@ -124,12 +131,13 @@ const unpin = (c, a, m) => {
 const userUnpin = (c, a, m) => {
   if (c === 'userunpin') {
     if (a[0] !== undefined) {
+      const server_id   = m.guild.id;
       const user_id     = m.author.id;
       const message_url = a[0];
 
-      api.unpin(user_id, message_url, false);
+      api.unpin(server_id, user_id, message_url, false);
 
-      reply(m, `unpinned message: **${message_url}** for UserId: **${user_id}**`);
+      reply(m, `unpinned message: **${message_url}** for **${m.author.username}**`);
     } else {
       reply(m, `${prefix}userUnpin syntax: <message_url>`);
     }
@@ -139,15 +147,14 @@ const userUnpin = (c, a, m) => {
 const searchPins = (c, a, m) => {
   if (c === 'searchpins') {
     if (a[0] !== undefined) {
+      const server_id   = m.guild.id;
       const user_id     = m.author.id;
       const keywords    = a.join(' ');
 
       // fetching common pins based on keywords
-      const pins = api.search(user_id, keywords);
+      const pins = api.search(server_id, user_id, keywords);
 
-      // TODO: how to embed messages in chat?
-
-      reply(m, `searching in pins for **${keywords}** Result(s): ${stringifyPins(pins)}`);
+      reply(m, `searching in pins for **${keywords}**: ${stringifyPins(pins)}`);
     } else {
       reply(m, `${prefix}searchPins syntax: <keywords>`);
     }
@@ -157,13 +164,14 @@ const searchPins = (c, a, m) => {
 const userSearchPins = (c, a, m) => {
   if (c === 'usersearchpins') {
     if (a[0] !== undefined) {
+      const server_id   = m.guild.id;
       const user_id     = m.author.id;
       const keywords    = a[0];
 
       // fetching per-user pins based on keywords
-      const pins = api.search(user_id, keywords, false);
+      const pins = api.search(server_id, user_id, keywords, false);
 
-      reply(m, `searching in pins for **${keywords}** for UserId: **${user_id}**. Result(s): ${stringifyPins(pins)}`);
+      reply(m, `searching in **${m.author.username}**'s pins for **${keywords}**: ${stringifyPins(pins)}`);
     } else {
       reply(m, `${prefix}userSearchPins syntax: <keywords>`);
     }
