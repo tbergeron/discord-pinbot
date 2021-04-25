@@ -24,6 +24,13 @@ Auth URL: https://discord.com/api/oauth2/authorize?client_id=834906079837290538&
 - [x] Plan & implement search message pin feature
 - [ ] Plan & implement message reminder feature
 
+- Idea: !translate <from_language> <to_language> <message>
+- Idea: !keywords, !keywords (to fetch a list of keywords usable with !searchpins & !usersearchpins)
+
+
+- Idea: curfew (beep at 3am)
+  - Timer kind of thing
+
 ***
 
 # Commands & Syntax
