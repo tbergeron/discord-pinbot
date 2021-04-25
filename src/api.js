@@ -98,17 +98,25 @@ module.exports = {
   },
 
   remind: (server_id, user_id, message_url, delay, keywords) => {
-    // TODO
+    // TODO: interpret delay
+    // TODO: set timer and retain it
+    // TODO: setup action that will get executed
+    // TODO: how to actually send a message from here? (do we need observers/messaging?)
     console.log('CREATING REMINDER FOR:', server_id, user_id, message_url, delay, keywords);
   },
 
   forget: (server_id, user_id, message_url) => {
-    // TODO
-    // TODO: fetch line; and return it so we can display forgot reminder info
+    // TODO: all of the below needs to be done in a secure manner
+    //    (wait for one instruction to complete safely before executing then next)
+    // TODO: find reminder in database
+    // TODO: fetch related timer
+    // TODO: destroy timer
+    // TODO: delete reminder from database
+    // TODO: return deleted line so we can display forgot reminder info
 
     console.log('FORGETTING REMINDER FOR:', server_id, user_id, message_url);
 
     // return keywords;
-  },
+  }
 
 };
