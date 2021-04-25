@@ -34,10 +34,10 @@ module.exports = {
   pin: (user_id, message_url, keywords, common = true) => {
     try {
       if (common) {
-        data[message_url] = keywords;
+        pinsData[message_url] = keywords;
       } else {
         const key = buildKey(user_id, message_url);
-        data[key] = keywords;
+        pinsData[key] = keywords;
       }
       persist();
     } catch (e) {
@@ -50,10 +50,10 @@ module.exports = {
   unpin: (user_id, message_url, common = true) => {
     try {
       if (common) {
-        delete data[message_url];
+        delete pinsData[message_url];
       } else {
         const key = buildKey(user_id, message_url);
-        delete data[key];
+        delete pinsData[key];
       }
       persist();
     } catch (e) {
@@ -64,7 +64,8 @@ module.exports = {
   },
 
   search: (server_id, user_id, keywords, common = true) => {
-    const filteredPins = Object.entries(data).filter(e => e[1].includes(keywords));
+    // TODO: this entire method could be optimized so much
+    const filteredPins = Object.entries(pinsData).filter(e => e[1].includes(keywords));
     try {
       if (common) {
         // if common; only get entries WITHOUT user_id attached
