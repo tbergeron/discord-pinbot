@@ -59,20 +59,17 @@ const help = (c, a, m) => {
 
 const uptime = (c, a, m) => {
   if (c === 'uptime') {
-    // TODO rewrite this very sucky code
     let totalSeconds = (m.client.uptime / 1000);
     let days = Math.floor(totalSeconds / 86400);
     totalSeconds %= 86400;
-
     let hours = Math.floor(totalSeconds / 3600);
     totalSeconds %= 3600;
-
     let minutes = Math.floor(totalSeconds / 60);
     let seconds = Math.floor(totalSeconds % 60);
 
     let uptime = `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds.`;
 
-    reply(m, `i have been up for ${uptime}`);
+    return reply(m, `i have been up for ${uptime}`);
   }
 };
 
@@ -86,9 +83,9 @@ const pin = (c, a , m) => {
 
       api.pin(server_id, user_id, message_url, keywords);
 
-      reply(m, `pinned message: **${message_url}** (keywords: **${keywords}**)`);
+      return reply(m, `pinned message: **${message_url}** (keywords: **${keywords}**)`);
     } else {
-      reply(m, `${prefix}pin syntax: <message_url> <keywords>`);
+      return reply(m, `${prefix}pin syntax: <message_url> <keywords>`);
     }
   }
 };
@@ -103,9 +100,9 @@ const userPin = (c, a , m) => {
 
       api.pin(server_id, user_id, message_url, keywords, false);
 
-      reply(m, `pinned message: **${message_url}** for **${m.author.username}** (keywords: **${keywords}**)`);
+      return reply(m, `pinned message: **${message_url}** for **${m.author.username}** (keywords: **${keywords}**)`);
     } else {
-      reply(m, `${prefix}userPin syntax: <message_url> <keywords>`);
+      return reply(m, `${prefix}userPin syntax: <message_url> <keywords>`);
     }
   }
 };
@@ -119,9 +116,9 @@ const unpin = (c, a, m) => {
 
       api.unpin(server_id, user_id, message_url);
 
-      reply(m, `unpinned message: **${message_url}**`);
+      return reply(m, `unpinned message: **${message_url}**`);
     } else {
-      reply(m, `${prefix}unpin syntax: <message_url>`);
+      return reply(m, `${prefix}unpin syntax: <message_url>`);
     }
   }
 };
@@ -135,9 +132,9 @@ const userUnpin = (c, a, m) => {
 
       api.unpin(server_id, user_id, message_url, false);
 
-      reply(m, `unpinned message: **${message_url}** for **${m.author.username}**`);
+      return reply(m, `unpinned message: **${message_url}** for **${m.author.username}**`);
     } else {
-      reply(m, `${prefix}userUnpin syntax: <message_url>`);
+      return reply(m, `${prefix}userUnpin syntax: <message_url>`);
     }
   }
 };
@@ -152,9 +149,9 @@ const searchPins = (c, a, m) => {
       // fetching common pins based on keywords
       const pins = api.search(server_id, user_id, keywords);
 
-      reply(m, `searching in pins for **${keywords}**: ${stringifyPins(pins)}`);
+      return reply(m, `searching in pins for **${keywords}**: ${stringifyPins(pins)}`);
     } else {
-      reply(m, `${prefix}searchPins syntax: <keywords>`);
+      return reply(m, `${prefix}searchPins syntax: <keywords>`);
     }
   }
 };
@@ -169,9 +166,9 @@ const userSearchPins = (c, a, m) => {
       // fetching per-user pins based on keywords
       const pins = api.search(server_id, user_id, keywords, false);
 
-      reply(m, `searching in **${m.author.username}**'s pins for **${keywords}**: ${stringifyPins(pins)}`);
+      return reply(m, `searching in **${m.author.username}**'s pins for **${keywords}**: ${stringifyPins(pins)}`);
     } else {
-      reply(m, `${prefix}userSearchPins syntax: <keywords>`);
+      return reply(m, `${prefix}userSearchPins syntax: <keywords>`);
     }
   }
 };
@@ -187,9 +184,9 @@ const remindme = (c, a, m) => {
 
       api.remind(server_id, user_id, message_url, delay, keywords);
 
-      reply(m, `created reminder for: **${message_url}** in **${delay}** message: **${keywords}**`);
+      return reply(m, `created reminder for: **${message_url}** in **${delay}** (**${keywords}**)`);
     } else {
-      reply(m, `${prefix}remind syntax: <message_url> <delay> <reminder message>`);
+      return reply(m, `${prefix}remind syntax: <message_url> <delay> <reminder message>`);
     }
   }
 };
@@ -201,11 +198,11 @@ const forget = (c, a, m) => {
       const user_id     = m.author.id;
       const message_url = a[0];
 
-      api.forget(server_id, user_id, message_url);
+      const keywords = api.forget(server_id, user_id, message_url);
 
-      reply(m, `forgot reminder for: **${message_url}** TODO: fetch line; and return it so we can display forgot reminder info`);
+      return reply(m, `forgot reminder for: **${message_url}** (**${keywords}**)`);
     } else {
-      reply(m, `${prefix}forget syntax: <message_url>`);
+      return reply(m, `${prefix}forget syntax: <message_url>`);
     }
   }
 };

@@ -104,7 +104,11 @@ module.exports = {
 
   forget: (server_id, user_id, message_url) => {
     // TODO
+    // TODO: fetch line; and return it so we can display forgot reminder info
+
     console.log('FORGETTING REMINDER FOR:', server_id, user_id, message_url);
+
+    // return keywords;
   },
 
 };
