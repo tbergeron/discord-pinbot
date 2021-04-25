@@ -4,15 +4,11 @@ const prefix = (config.PREFIX) ? config.PREFIX : '!';
 // requiring API
 const api = require('./api');
 
-// reply with integrated output to console
+// reply with integrated debug output to console
 const reply = (m, c) => {
-
   const server_id   = m.guild.id;
   const user_id     = m.author.id;
-
-  console.log('server_id:', server_id, 'user_id:', user_id);
-
-  console.log('[replying]:', c);
+  console.log('server_id:', server_id, 'user_id:', user_id, '[replying]:', c);
   m.react('👌');
   m.reply(c);
 };
@@ -41,20 +37,22 @@ const stringifyPins = (pins) => {
   return stringifiedPins;
 }
 
-// commands
+// command controllers
 const help = (c, a, m) => {
   if (c === 'help') {
     let helpMessage = "here are my current commands:\n```";
-    helpMessage += "!uptime\n\n";
-    helpMessage += "Common Pins (shared between all users)\n\n";
+    helpMessage += "!uptime\n";
+    helpMessage += "\nCommon Pins (shared between all users)\n\n";
     helpMessage += "!pin            <message_url> <keywords>\n";
     helpMessage += "!unpin          <message_url>\n";
-    helpMessage += "!searchpins     <keywords>\n\n";
-    helpMessage += "Per-User Pins (only accessible by you)\n\n";
-    helpMessage += "!userpin        <message_url> <keyword>\n";
+    helpMessage += "!searchpins     <keywords>\n";
+    helpMessage += "\nPer-User Pins (only accessible by you)\n\n";
+    helpMessage += "!userpin        <message_url> <keywords>\n";
     helpMessage += "!userunpin      <message_url>\n";
-    helpMessage += "!usersearchpins <keywords>\n```";
-
+    helpMessage += "!usersearchpins <keywords>\n";
+    helpMessage += "\nMessage Reminders\n\n";
+    helpMessage += "!remindme      <message_url> <delay> <reminder message>\n";
+    helpMessage += "!forget        <message_url>\n```";
     reply(m, helpMessage);
   }
 };
@@ -178,6 +176,40 @@ const userSearchPins = (c, a, m) => {
   }
 };
 
+const remindme = (c, a, m) => {
+  if (c === 'remindme') {
+    if (a[0] !== undefined) {
+      const server_id   = m.guild.id;
+      const user_id     = m.author.id;
+      const message_url = a[0];
+      const delay       = a[1];
+      const keywords    = a.slice(2, a.length).join(' ');
+
+      api.remind(server_id, user_id, message_url, delay, keywords);
+
+      reply(m, `created reminder for: **${message_url}** in **${delay}** message: **${keywords}**`);
+    } else {
+      reply(m, `${prefix}remind syntax: <message_url> <delay> <reminder message>`);
+    }
+  }
+};
+
+const forget = (c, a, m) => {
+  if (c === 'forget') {
+    if (a[0] !== undefined) {
+      const server_id   = m.guild.id;
+      const user_id     = m.author.id;
+      const message_url = a[0];
+
+      api.forget(server_id, user_id, message_url);
+
+      reply(m, `forgot reminder for: **${message_url}** TODO: fetch line; and return it so we can display forgot reminder info`);
+    } else {
+      reply(m, `${prefix}forget syntax: <message_url>`);
+    }
+  }
+};
+
 // exposed command implementation
 module.exports = (message) => {
   // making sure message author is not a bot
@@ -201,4 +233,6 @@ module.exports = (message) => {
   userUnpin      (command, args, message);
   searchPins     (command, args, message);
   userSearchPins (command, args, message);
+  remindme       (command, args, message);
+  forget         (command, args, message);
 };

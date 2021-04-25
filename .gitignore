@@ -1,5 +1,5 @@
 config.json
-database.json
+data/*
 
 # Logs
 logs

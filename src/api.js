@@ -1,22 +1,30 @@
 // file-based data API implementation
-const fs           = require('fs');
-const databasePath = './database.json';
-const SEPARATOR    = '_';
+const fs                    = require('fs');
+const pinsDatabasePath      = './data/database.json';
+const remindersDatabasePath = './data/reminders.json';
+const SEPARATOR             = '_';
 
 // create database if file doesn't exist yet
-if (!fs.existsSync(databasePath)) {
-  fs.writeFileSync(databasePath, '{}');
+if (!fs.existsSync(pinsDatabasePath)) {
+  fs.writeFileSync(pinsDatabasePath, '{}');
+}
+if (!fs.existsSync(remindersDatabasePath)) {
+  fs.writeFileSync(remindersDatabasePath, '{}');
 }
 
 // read database content
-const databaseContent = fs.readFileSync(databasePath, 'utf8');
-const data            = JSON.parse(databaseContent);
+const remindersDatabaseContent = fs.readFileSync(remindersDatabasePath, 'utf8');
+const remindersData            = JSON.parse(remindersDatabaseContent);
+const pinsDatabaseContent      = fs.readFileSync(pinsDatabasePath, 'utf8');
+const pinsData                 = JSON.parse(pinsDatabaseContent);
 
 // write memory data to disk
 const persist = () => {
-  fs.writeFileSync(databasePath, JSON.stringify(data));
+  fs.writeFileSync(pinsDatabasePath,      JSON.stringify(pinsData));
+  fs.writeFileSync(remindersDatabasePath, JSON.stringify(remindersData));
 };
 
+// build key to use in database
 const buildKey = (user_id, message_url) => {
   return `${user_id}${SEPARATOR}${message_url}`;
 }
@@ -87,6 +95,16 @@ module.exports = {
     } finally {
       return filteredPins;
     }
-  }
+  },
+
+  remind: (server_id, user_id, message_url, delay, keywords) => {
+    // TODO
+    console.log('CREATING REMINDER FOR:', server_id, user_id, message_url, delay, keywords);
+  },
+
+  forget: (server_id, user_id, message_url) => {
+    // TODO
+    console.log('FORGETTING REMINDER FOR:', server_id, user_id, message_url);
+  },
 
 };
