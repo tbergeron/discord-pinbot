@@ -1,6 +1,6 @@
 // file-based data API implementation
 const fs                    = require('fs');
-const pinsDatabasePath      = './data/database.json';
+const pinsDatabasePath      = './data/pins.json';
 const remindersDatabasePath = './data/reminders.json';
 const SEPARATOR             = '_';
 
@@ -20,8 +20,9 @@ const pinsData                 = JSON.parse(pinsDatabaseContent);
 
 // write memory data to disk
 const persist = () => {
-  fs.writeFileSync(pinsDatabasePath,      JSON.stringify(pinsData));
-  fs.writeFileSync(remindersDatabasePath, JSON.stringify(remindersData));
+  const pinsSaved      = fs.writeFileSync(pinsDatabasePath,      JSON.stringify(pinsData));
+  const remindersSaved = fs.writeFileSync(remindersDatabasePath, JSON.stringify(remindersData));
+  // console.log('PERSIST: pinsSaved:', pinsSaved, 'remindersSaved:', remindersSaved);
 };
 
 // build key to use in database
