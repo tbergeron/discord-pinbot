@@ -76,12 +76,11 @@ const uptime = (c, a, m) => {
 const pin = (c, a , m) => {
   if (c === 'pin') {
     if ((a[0] !== undefined) && (a[1] !== undefined)) {
-      const server_id   = m.guild.id;
       const user_id     = m.author.id;
       const message_url = a[0];
       const keywords    = a.slice(1, a.length).join(' ');
 
-      api.pin(server_id, user_id, message_url, keywords);
+      api.pin(user_id, message_url, keywords);
 
       return reply(m, `pinned message: **${message_url}** (keywords: **${keywords}**)`);
     } else {
@@ -93,12 +92,11 @@ const pin = (c, a , m) => {
 const userPin = (c, a , m) => {
   if (c === 'userpin') {
     if ((a[0] !== undefined) && (a[1] !== undefined)) {
-      const server_id   = m.guild.id;
       const user_id     = m.author.id;
       const message_url = a[0];
       const keywords    = a.slice(1, a.length).join(' ');
 
-      api.pin(server_id, user_id, message_url, keywords, false);
+      api.pin(user_id, message_url, keywords, false);
 
       return reply(m, `pinned message: **${message_url}** for **${m.author.username}** (keywords: **${keywords}**)`);
     } else {
@@ -110,11 +108,10 @@ const userPin = (c, a , m) => {
 const unpin = (c, a, m) => {
   if (c === 'unpin') {
     if (a[0] !== undefined) {
-      const server_id   = m.guild.id;
       const user_id     = m.author.id;
       const message_url = a[0];
 
-      api.unpin(server_id, user_id, message_url);
+      api.unpin(user_id, message_url);
 
       return reply(m, `unpinned message: **${message_url}**`);
     } else {
@@ -126,11 +123,10 @@ const unpin = (c, a, m) => {
 const userUnpin = (c, a, m) => {
   if (c === 'userunpin') {
     if (a[0] !== undefined) {
-      const server_id   = m.guild.id;
       const user_id     = m.author.id;
       const message_url = a[0];
 
-      api.unpin(server_id, user_id, message_url, false);
+      api.unpin(user_id, message_url, false);
 
       return reply(m, `unpinned message: **${message_url}** for **${m.author.username}**`);
     } else {
