@@ -28,8 +28,9 @@ Auth URL: https://discord.com/api/oauth2/authorize?client_id=834906079837290538&
   - See this as an objective for Reminders integration: https://tmp.f8.n0.cdn.getcloudapp.com/items/YEuRDk58/38db674c-f80e-40b4-a32a-cfa57701324f.png?v=c9d4e732ebff500e9dc047084542971a
 
 - Idea: !translate <from_language> <to_language> <message>
-- Idea: curfew (beep at 3am (recurring reminders?))
+- Idea: Recurring reminders?
 - Idea: Integrate other bot's feature (pomodoro, groovy, etc)
+- Idea: Backup server content
 
 ***
 
